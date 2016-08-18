@@ -1,0 +1,51 @@
+{
+    "Crown of Sochi" : {
+        "Lucky Coin"                      : "0.77316",
+        "Imperial Exam List"              : "0.14532",
+        "Perfect · Token of Best Luck"    : "0.025",
+        "Perfect Spirit Charm"            : "0.016",
+        "Perfect Guardian Charm"          : "0.015",
+        "Garnet Gem"                      : "0.002",
+        "Citrine Gem"                     : "0.002",
+        "Sapphire Gem"                    : "0.002",
+        "Diamond of Tiger"                : "0.001",
+        "Diamond of Dragon"               : "0.001",
+        "Stone of the Savant"             : "0.001",
+        "Primeval Stone"                  : "0.001",
+        "Wing Trophy · Lunar Glade"       : "0.001",
+        "Lunar Glade Insignia · Weapon"   : "0.001",
+        "Lunar Glade Insignia · Ornament" : "0.001",
+        "Warsong Marshal Badge"           : "0.001",
+        "Cube of Fate Stamp"              : "0.001",
+        "Colored Deer Egg Ticket"         : "0.0009",
+        "Stone of the Jungle Pack"        : "0.0008",
+        "Wishful Wing Token"              : "0.0008",
+        "Golden Coin"                     : "0.0007",
+        "Dark Lord Fashion Pack (Onyx)"   : "0.0007",
+        "Dark Lord Fashion Pack (Ivory)"  : "0.0007",
+        "Demure Fashion Pack"             : "0.0007",
+        "Warsoul: Samantabhadra"          : "0.0006",
+        "Warsoul: Arkarsja"               : "0.0006",
+        "Warsoul: Jakari"                 : "0.0006",
+        "Warsoul: Manjusri"               : "0.0006",
+        "Warsoul: Avalokites"             : "0.0006",
+        "Warsoul: Ksitigarbha"            : "0.0005",
+        "Warsoul: Vajra"                  : "0.0005",
+        "General Summer's Token"          : "0.00025",
+        "Medal of Glory"                  : "0.00025",
+        "Sky Cover"                       : "0.0002",
+        "Cloud Stir"                      : "0.0002",
+        "Matchless Wings"                 : "0.0001",
+        "Scroll of Tome"                  : "0.00008",
+        "Crown of Madness"                : "0.00007",
+        "Wings of Ascension"              : "0.00007"
+    },
+    "Delicate Moon Chest" : {
+        "Lucky Coin" : "0.831337",
+        "Golden Coin" : "0.0008"
+    },
+    "Anniversary Pack" : {
+        "Crown of Madness" : "100"
+    }
+
+}

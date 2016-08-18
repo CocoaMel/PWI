@@ -1,10 +1,14 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    block head
+      title= title
+      link(rel='stylesheet', href='/stylesheets/style.css')
   body
       .header
         p(class='title') Perfect World Resource
       .mainContent
         block content
+      block scripts
+        script(src="js/jquery-3.1.0.min.js")
+        script(src="js/main.js")

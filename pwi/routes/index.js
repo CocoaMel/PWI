@@ -6,7 +6,11 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/simulations', function (req, res, next) {
-    res.render('index', { title: 'Simulations' });
-})
+    res.render('simulations', { title: 'Simulations' });
+});
+
+router.get('/packs', function (req, res, next) {
+    res.render('packs', {title: 'Pack Opening Simulator'})
+});
 
 module.exports = router;
