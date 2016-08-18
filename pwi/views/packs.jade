@@ -6,7 +6,18 @@ block content
       p Pack Opening Simulator
     hr(class="contentBreak")
     .sectionContent
-      p Select a Pack!
+      select(id="packList" class="hidden")
+        option(value="0" name="Select a Pack!") Select a Pack!
+      table(id="packDisplay")
+        tr
+          td(id="packData")
+            form
+              input(type="radio" name="packOptions" value="num") 
+              | Open a certain number of Packs
+              input(type="radio" name="packOptions" value="filter") 
+              | Open packs until item(s) obtained
+          td(id="packInfo")
+            table(id="packContents")
 
 block append scripts
   script(src="js/packs.js")

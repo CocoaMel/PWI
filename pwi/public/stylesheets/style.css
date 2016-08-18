@@ -37,6 +37,9 @@ a {
 .mainContent {
   text-align: center;
 }
+.hidden {
+  display: none;
+}
 .mainOptionsList {
   width: 75%;
   margin: 0 auto;
@@ -80,6 +83,7 @@ a {
   box-shadow: 0 0 8px 1px rgba(255,255,255,0.3);
   margin: 0 auto;
   color: #eee;
+  padding: 10px;
 }
 .contentBreak {
   width: 80%;
@@ -87,6 +91,21 @@ a {
 }
 .sectionTitle {
   font-size: 20px;
-  text-align: center;
   line-height: 2;
+}
+#packDisplay {
+  width: 100%;
+}
+#packData {
+  width: 60%;
+  vertical-align: top;
+}
+#packInfo {
+  width: 40%;
+}
+#packContents {
+  margin: 0 auto;
+  text-align: left;
+  border-spacing: 5px;
+  padding-top: 20px;
 }

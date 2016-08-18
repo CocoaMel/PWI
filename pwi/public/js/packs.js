@@ -3,18 +3,10 @@ $(function () {
     console.log("Hello Packs!");
 
     /* Setup */
-    /*var currentPackData = {
+    var currentPackData = {
         items: [],
         chances: []
     };
-
-    var test = $.ajax({
-        type: "GET",
-        url: "/test",
-        success: function (data) {
-            console.log("done.");
-        }
-    })
 
     var loadPacks = $.ajax({
         url: "../files/packs.json",
@@ -27,6 +19,7 @@ $(function () {
                 $("#packList").append("<option name=\"" + itemData.length + 
                     "\" value=\"" + key + "\">" + key + " </option>");
             });
+            $("#packList").removeClass("hidden")
             $("#packList").change(function (data) {
                 var listArrayIndex = $(this).find("option:selected").attr("name") - 1;
                 if (listArrayIndex != -1) {
@@ -37,7 +30,7 @@ $(function () {
     });
 
     var loadPackItemList = function (itemList) {
-        $("#tableResults").html(function (data) {
+        $("#packContents").html(function (data) {
             var results = "",
                 arrayIndex = 0;
             currentPackData.items = [];
@@ -45,17 +38,30 @@ $(function () {
             for (key in itemList) {
                 currentPackData.items[arrayIndex] = key;
                 currentPackData.chances[arrayIndex] = parseFloat(itemList[key]);
-                results += "<tr><td>" + key + " (" + 
-                    (itemList[key] * 100).toFixed(4).replace(/(\.[0-9]*?)0+$/, "$1") +
-                    "%)</td><td id=\"" + key.replace(/\W/g,'').toLowerCase() + "\"></tr>";
+                results += "<tr><td id=\"" + formatID(key) + "\"><td>" + 
+                    key + " (" + formatPercent(itemList[key]) + "%)</td></tr>";
                 arrayIndex++;
+            }
+            if (arrayIndex % 3 != 2) {
+                results += "</tr>"
             }
             return results;
         });
-    };*/
+    };
+
+    var formatPercent = function (num) {
+        return removeTrailingZeroes((num * 100).toFixed(4));
+    };
+
+    var formatID = function (unformattedString) {
+        return unformattedString.replace(/\W/g,'').toLowerCase();
+    };
+
+    var removeTrailingZeroes = function (num) {
+        return num.replace(/(\.[0-9]*?)0+$/, "$1");
+    };
 
     /* Event Handlers */
-
     /*$("#submit").on("click", function (event) {
         if ($.isNumeric( $("#num").val()) ) {
 
