@@ -42,7 +42,7 @@ $(function () {
                 currentPackData.items[arrayIndex] = key;
                 currentPackData.chances[arrayIndex] = parseFloat(itemList[key]);
                 results += "<tr><td id=\"" + formatID(key) + "\">0</td><td>" + 
-                    key + " (" + formatPercent(itemList[key]) + "%)</td></tr>";
+                    key + " (" + formatPercent(itemList[key]) + ")</td></tr>";
                 arrayIndex++;
             }
             if (arrayIndex % 3 != 2) {
@@ -114,7 +114,7 @@ $(function () {
 
         for (var i = 0; i < list.length; i++) {
             weightSum += chances[i];
-            weightSum = +weightSum.toFixed(4);
+            weightSum = +weightSum.toFixed(6);
 
             if (randomNum <= weightSum) {
                 return list[i];
@@ -123,7 +123,14 @@ $(function () {
     }
 
     var formatPercent = function (num) {
-        return removeTrailingZeroes((num * 100).toFixed(4));
+        var formattedNum = removeTrailingZeroes((num * 100).toFixed(6)).toString() + "%";
+        console.log(formattedNum);
+        if (formattedNum.includes(".%")) {
+            var periodIndex = formattedNum.indexOf(".");
+            formattedNum = formattedNum.substring(0, periodIndex + 1) + 
+                "0" + formattedNum.substring(periodIndex + 1, formattedNum.length);
+        }
+        return formattedNum;
     };
 
     var formatID = function (unformattedString) {
