@@ -51,6 +51,12 @@ $(function () {
             if (arrayIndex % 3 != 2) {
                 results += "</tr>"
             }
+            $("#packWarning").html("");
+            if (currentPackData.items.length > 100) {
+                $("#packWarning").html("Warning: This pack contains a large number of items. " + 
+                    "Since packs are opened continuously with no delay, opening a large number " +
+                    "of them could cause the site to become unresponsive. Please use caution!")
+            }
             return results;
         });
     };
@@ -82,6 +88,13 @@ $(function () {
                     numItemsObtained[itemIndex]++;
                 };
 
+                if ($("#packsByNumStatus").html().includes("... P")) {
+                    $("#packsByNumStatus").html(function () {
+                        var stopIndex = $("#packsByNumStatus").html().indexOf("... P") + 4;
+                        return $("#packsByNumStatus").html().substring(0, stopIndex);
+                    })
+                }
+
                 writeResultsToTable(numItemsObtained);
                 $("#packsByNumStatus").append("Done!");
             }, 50);
@@ -106,6 +119,7 @@ $(function () {
             $("#packsByFilterStatus").html("Opening packs until " + targetNum + " " + 
                 targetItem + " obtained... " + 
                 ((targetNum >= 999) ? "Please be patient. This could take a while! " : ""));
+
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
                 var numItemsObtained = new Array(currentPackData.items.length).fill(0);
@@ -199,47 +213,5 @@ $(function () {
     var getRandomNum = function (min, max) {
         return Math.random() * (max - min) + min;
     };
-
-    /* Event Handlers */
-
-    /*$("#submitItem").on("click", function() {
-        if (currentPackData.items.indexOf( $("#item").val()) != -1 ) {
-
-            var targetItem = $("#item").val();
-            var numTimesYouGotTheCrap = new Array(currentPackData.items.length).fill(0);
-            var numTries = 0;
-            var item;
-            var itemIndex;
-            var numWanted;
-            var numGotten = 0;
-
-            if ($("#numOfItem").val() === "" || !$.isNumeric($("#numOfItem").val())) {
-                numWanted = 1;
-            } else {
-                numWanted = $("#numOfItem").val();
-            }
-
-            do {
-                item = getRandomItemFromListByWeight(currentPackData);
-                itemIndex = currentPackData.items.indexOf(item);
-                numTimesYouGotTheCrap[itemIndex]++;
-                numTries++;
-                if (targetItem === item) {
-                    numGotten++;
-                }
-            } while (numGotten < numWanted);
-
-            $("#itemResults").html("Number of Packs Opened to Receive " + numWanted + " " +
-                targetItem + ": " + numTries);
-
-            writeNumbersToTable(numTimesYouGotTheCrap);
-
-        } else {
-            console.log(":O");
-        }
-    })*/
-    
-
-    
 
 });
