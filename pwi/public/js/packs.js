@@ -57,6 +57,7 @@ $(function () {
 
     /* Event Handlers */
     $("#submitPacksByNum").on("click", function (event) {
+        $("#packsByFilterStatus").html("&nbsp;");
         var numPacksToOpen = $("#packsByNum").val();
         if (numPacksToOpen === "0") {
             $("#packsByNumStatus").html("You opened no packs and got nothing ):")
@@ -104,7 +105,7 @@ $(function () {
             }
             $("#packsByFilterStatus").html("Opening packs until " + targetNum + " " + 
                 targetItem + " obtained... " + 
-                ((targetNum >= "999") ? "Please be patient. This could take a while! " : ""));
+                ((targetNum >= 999) ? "Please be patient. This could take a while! " : ""));
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
                 var numItemsObtained = new Array(currentPackData.items.length).fill(0);
@@ -124,6 +125,14 @@ $(function () {
                 } while (numGotten < targetNum) 
 
                 writeResultsToTable(numItemsObtained);
+
+                if ($("#packsByFilterStatus").html().includes("... P")) {
+                    $("#packsByFilterStatus").html(function () {
+                        var stopIndex = $("#packsByFilterStatus").html().indexOf("... P") + 4;
+                        return $("#packsByFilterStatus").html().substring(0, stopIndex);
+                    })
+                }
+
                 $("#packsByFilterStatus").append("Done! It took " + numTries + " packs.");
             }, 50);
 
