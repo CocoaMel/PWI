@@ -15,8 +15,14 @@ block content
             input(type="text" id="packsByNum" placeholder="Enter a number!" maxlength="7")
             | 
             input(type="button" value="Try your Luck!" id="submitPacksByNum")
-            br
             p(id="packsByNumStatus") &nbsp;
+            | Open Packs until Item(s) Obtained: 
+            select(id="packItems")
+            | 
+            input(type="text" id="packsByFilterAddNum" placeholder="quantity" maxlength="4")
+            | 
+            input(type="button" id="submitPacksByFilter" value="Try for item(s)!")
+            p(id="packsByFilterStatus") &nbsp;
           td(id="packInfo")
             table(id="packContents")
 

@@ -19,7 +19,7 @@ $(function () {
                 $("#packList").append("<option name=\"" + itemData.length + 
                     "\" value=\"" + key + "\">" + key + " </option>");
             });
-            $("#packList").removeClass("hidden")
+            $("#packList").removeClass("hidden");
             $("#packList").change(function (data) {
                 var listArrayIndex = $(this).find("option:selected").attr("name") - 1;
                 if (listArrayIndex != -1) {
@@ -33,6 +33,7 @@ $(function () {
     });
 
     var loadPackItemList = function (itemList) {
+        $("#packItems").html("<option value=\"0\" name=\"select\">Select an Item!</option>");
         $("#packContents").html(function (data) {
             var results = "",
                 arrayIndex = 0;
@@ -44,6 +45,8 @@ $(function () {
                 results += "<tr><td id=\"" + formatID(key) + "\">0</td><td>" + 
                     key + " (" + formatPercent(itemList[key]) + ")</td></tr>";
                 arrayIndex++;
+                $("#packItems").append("<option name=\"" + arrayIndex + "\" value=\"" + 
+                    key + "\">" + key + "</option>");
             }
             if (arrayIndex % 3 != 2) {
                 results += "</tr>"
@@ -63,7 +66,8 @@ $(function () {
             $("#packsByNumStatus").html("Sorry - only numbers are accepted!");
         } else {
             $("#packsByNumStatus").html("Opening " + numPacksToOpen + " pack" + 
-                ((numPacksToOpen === "1") ? "" : "s") + "... " );
+                ((numPacksToOpen === "1") ? "" : "s") + "... " + 
+                ((numPacksToOpen >= "1000000") ? "Please be patient. This could take a while! " : ""));
 
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
@@ -81,6 +85,49 @@ $(function () {
                 $("#packsByNumStatus").append("Done!");
             }, 50);
         } 
+    });
+
+    $("#submitPacksByFilter").on("click", function (event) {
+        var targetItem = $("#packItems").find("option:selected").val();
+        $("#packsByNumStatus").html("&nbsp;");
+        if (targetItem === "0") {
+            $("#packsByFilterStatus").html("Please select an item!");
+        } else if ($("#packsByFilterAddNum").val() === "0") {
+            $("#packsByFilterStatus").html("You opened 0 packs and got 0 " + 
+                targetItem + ". Congrats!");
+        } else if (!$.isNumeric($("#packsByFilterAddNum").val()) && $("#packsByFilterAddNum").val() != "") {
+            $("#packsByFilterStatus").html("Sorry - only numbers are accepted!");
+        } else {
+            var targetNum = $("#packsByFilterAddNum").val();
+            if (targetNum === "") {
+                targetNum = 1;
+            }
+            $("#packsByFilterStatus").html("Opening packs until " + targetNum + " " + 
+                targetItem + " obtained... " + 
+                ((targetNum >= "999") ? "Please be patient. This could take a while! " : ""));
+            // run function on a delay because the above HTML won't update without it
+            window.setTimeout(function () {
+                var numItemsObtained = new Array(currentPackData.items.length).fill(0);
+                var item;
+                var itemIndex;
+                var numGotten = 0;
+                var numTries = 0;
+
+                do {
+                    item = getRandomItemFromListByWeight(currentPackData);
+                    itemIndex = currentPackData.items.indexOf(item);
+                    numItemsObtained[itemIndex]++;
+                    numTries++;
+                    if (item === targetItem) {
+                        numGotten++;
+                    }
+                } while (numGotten < targetNum) 
+
+                writeResultsToTable(numItemsObtained);
+                $("#packsByFilterStatus").append("Done! It took " + numTries + " packs.");
+            }, 50);
+
+        }
     });
 
 
@@ -124,7 +171,6 @@ $(function () {
 
     var formatPercent = function (num) {
         var formattedNum = removeTrailingZeroes((num * 100).toFixed(6)).toString() + "%";
-        console.log(formattedNum);
         if (formattedNum.includes(".%")) {
             var periodIndex = formattedNum.indexOf(".");
             formattedNum = formattedNum.substring(0, periodIndex + 1) + 
@@ -146,25 +192,8 @@ $(function () {
     };
 
     /* Event Handlers */
-    /*$("#submit").on("click", function (event) {
-        if ($.isNumeric( $("#num").val()) ) {
 
-            var numTimesToTest = $("#num").val();
-            var numTimesYouGotTheCrap = new Array(currentPackData.items.length).fill(0);
-            var item;
-            var itemIndex;
-
-            for (var i = 0; i < numTimesToTest; i++) {
-                item = getRandomItemFromListByWeight(currentPackData);
-                itemIndex = currentPackData.items.indexOf(item);
-                numTimesYouGotTheCrap[itemIndex]++;
-            };
-
-            writeNumbersToTable(numTimesYouGotTheCrap);
-        } 
-    });
-
-    $("#submitItem").on("click", function() {
+    /*$("#submitItem").on("click", function() {
         if (currentPackData.items.indexOf( $("#item").val()) != -1 ) {
 
             var targetItem = $("#item").val();
