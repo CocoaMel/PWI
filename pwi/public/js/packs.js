@@ -68,7 +68,7 @@ $(function () {
         } else {
             $("#packsByNumStatus").html("Opening " + numPacksToOpen + " pack" + 
                 ((numPacksToOpen === "1") ? "" : "s") + "... " + 
-                ((numPacksToOpen >= "1000000") ? "Please be patient. This could take a while! " : ""));
+                ((parseInt(numPacksToOpen) >= 1000000) ? "Please be patient. This could take a while! " : ""));
 
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
