@@ -1,7 +1,5 @@
 $(function () {
 
-    console.log("Hello Packs!");
-
     /* Setup */
     var currentPackData = {
         items: [],

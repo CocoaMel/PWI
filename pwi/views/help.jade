@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .sectionMain
+    .sectionTitle
+      p Helper Area
+    hr(class="contentBreak")
+    .sectionContent
+      textarea(id="packSection" placeholder="enter text to process here")
+      input(type="button" id="process" value="Process Text!")
+      p(id="result")
+
+block append scripts
+  script(src="js/helper.js")
