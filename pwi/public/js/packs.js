@@ -16,6 +16,7 @@ $(function () {
         numPacksToOpenID         = "#packsByNum",
         openNumPacksButtonID     = "#submitPacksByNum",
         openNumPacksStatusID     = "#packsByNumStatus",
+        openPacksForItemButtonID = "#submitPacksByFilter", // not implemented
         openPacksForItemStatusID = "#packsByFilterStatus";
 
     /* Setup */
@@ -147,19 +148,39 @@ $(function () {
 
     $("#submitPacksByFilter").on("click", function (event) {
         var targetItem = $(itemDropdownID).find("option:selected").val();
+        var targetNum = $("#packsByFilterAddNum").val();
+        if (targetNum === "") {
+            targetNum = 1;
+        }
         $(openNumPacksStatusID).html("&nbsp;");
         if (targetItem === "0") {
             $(openPacksForItemStatusID).html("Please select an item!");
-        } else if ($("#packsByFilterAddNum").val() === "0") {
+        } else if (targetNum === "0") {
             $(openPacksForItemStatusID).html("You opened 0 packs and got 0 " + 
                 targetItem + ". Congrats!");
-        } else if (!$.isNumeric($("#packsByFilterAddNum").val()) && $("#packsByFilterAddNum").val() != "") {
+        } else if (!$.isNumeric(targetNum)) {
             $(openPacksForItemStatusID).html("Sorry - only numbers are accepted!");
+        } else if (parseInt(targetNum) < 0 
+            || (Math.ceil(parseInt(targetNum)) === 0 
+            && Math.ceil(targetNum) === 0)) {
+            /*
+             This checks if the input is negative OR if input is between -1 and 
+             0. Numbers between -1 and 0 would not be caught under negative
+             because parseInt will return 0. Just including 
+             parseInt(numPacksToOpen) < 0 and 
+             Math.ceil(parseInt(numPacksToOpen)) === 0) means that in the event 
+             that the user enters a number between 0 (exclusive) and 1 
+             (exclusive), this block will be triggered, which we don't want. 
+             It will be triggered because parseInt will return 0. Adding 
+             Math.ceil(numPacksToOpen) === 0 will prevent this because in the 
+             event of a number between 0 and 1 (exlusive), the number will be 
+             rounded up to 1. As a result, this block would be ignored in favor 
+             of the last else case!
+            */
+            $(openPacksForItemStatusID).html("Sorry - only positive numbers are " + 
+                "accepted!");
         } else {
-            var targetNum = $("#packsByFilterAddNum").val();
-            if (targetNum === "") {
-                targetNum = 1;
-            }
+            targetNum = Math.ceil(targetNum);
             $(openPacksForItemStatusID).html("Opening packs until " + targetNum + " " + 
                 targetItem + " obtained... " + 
                 ((targetNum >= 999) ? "Please be patient. This could take a while! " : ""));

@@ -3,7 +3,6 @@ $(function () {
     console.log("Hello help!");
 
     $("#process").on("click", function (event) {
-        console.log("CLEAR");
         var textVal = $("#packSection").val();
         $("#packSection").val(" ");
         var res = textVal.split("\n");
@@ -25,6 +24,18 @@ $(function () {
             });
         };
         console.log("done");
+    });
+
+    $("#reverse").on("click", function (event) {
+        var textVal = $("#packSection").val();
+        $("#packSection").val(" ");
+        var res = textVal.split("\n");
+        var reverse = res.reverse();
+        for (var i = 0; i < reverse.length; i++) {
+            $("#packSection").val(function () {
+                return $(this).val() + "\n" + reverse[i];
+            });
+        }
     });
 
 });
