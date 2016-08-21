@@ -5,19 +5,25 @@ $(function () {
         "Since packs are opened continuously with no delay, opening a large " +
         "number of them could cause the site to become unresponsive. Please " +
         "use caution!",
-        PATIENCE = "Please be patient. This could take a while!";
+        WARNING_PACK_LENGTH = 100,
+        PATIENCE = "Please be patient. This could take a while!",
+        PATIENCE_OPEN_NUM = 1000000,
+        PATIENCE_ITEM_NUM = 999,
+        PERIODS_OFFSET = 4;
 
     /* ids */
-    var mainDropdownID           = "#packList",
-        mainTableID              = "#packDisplay",
-        itemDropdownID           = "#packItems",
-        packContentsAndChancesID = "#packContents",
-        numItemsWarningID        = "#packWarning",
-        numPacksToOpenID         = "#packsByNum",
-        openNumPacksButtonID     = "#submitPacksByNum",
-        openNumPacksStatusID     = "#packsByNumStatus",
-        openPacksForItemButtonID = "#submitPacksByFilter", // not implemented
-        openPacksForItemStatusID = "#packsByFilterStatus";
+    var mainDropdownID        = "#packList",
+        mainTableID           = "#packDisplay",
+        itemDropdownID        = ".packItems",
+        packContentsTableID   = "#packContents",
+        numItemsWarningID     = "#packWarning",
+        numPacksToOpenID      = "#packsByNum",
+        openNumPacksBtnID     = "#submitPacksByNum",
+        openNumPacksStatusID  = "#packsByNumStatus",
+        openForItemBtnID      = "#submitPacksByFilter", 
+        openForItemStatusID   = "#packsByItemStatus",
+        openPacksForItemAmtID = "#packsByItemNum",
+        addItemToFilterID     = "#addItemByFilter";
 
     /* Setup */
     var currentPackData = {
@@ -53,7 +59,7 @@ $(function () {
     var loadPackItemList = function (itemList) {
         $(itemDropdownID).html("<option value=\"0\" name=\"select\">Select an" +
             " Item!</option>");
-        $(packContentsAndChancesID).html(function () {
+        $(packContentsTableID).html(function () {
             var results                 = "",
                 arrayIndex              = 0;
                 currentPackData.items   = [];
@@ -68,7 +74,7 @@ $(function () {
                     "\" value=\"" + key + "\">" + key + "</option>");
             }
             $(numItemsWarningID).html("");
-            if (currentPackData.items.length > 100) {
+            if (currentPackData.items.length > WARNING_PACK_LENGTH) {
                 $(numItemsWarningID).html(WARNING);
             };
             return results;
@@ -78,8 +84,8 @@ $(function () {
 
 
     /* Event Handlers */
-    $(openNumPacksButtonID).on("click", function (event) {
-        $(openPacksForItemStatusID).html("&nbsp;");
+    $(openNumPacksBtnID).on("click", function (event) {
+        $(openForItemStatusID).html("&nbsp;");
         var numPacksToOpen = $(numPacksToOpenID).val();
         if (numPacksToOpen === "0") {
             $(openNumPacksStatusID).html("You opened no packs and got " + 
@@ -90,8 +96,8 @@ $(function () {
         } else if (!$.isNumeric(numPacksToOpen)) {
             $(openNumPacksStatusID).html("Sorry - only numbers are accepted!");
         } else if (parseInt(numPacksToOpen) < 0 
-            || (Math.ceil(parseInt(numPacksToOpen)) === 0 
-            && Math.ceil(numPacksToOpen) === 0)) {
+               || (Math.ceil(parseInt(numPacksToOpen)) === 0 
+               && Math.ceil(numPacksToOpen) === 0)) {
             /*
              This checks if the input is negative OR if input is between -1 and 
              0. Numbers between -1 and 0 would not be caught under negative
@@ -109,11 +115,10 @@ $(function () {
             $(openNumPacksStatusID).html("Sorry - only positive numbers are " + 
                 "accepted!");
         } else {
-            console.log(parseInt(numPacksToOpen).toString());
             numPacksToOpen = Math.ceil(numPacksToOpen);
             $(openNumPacksStatusID).html("Opening " + numPacksToOpen + 
                 makePluralIfNeeded(" pack", numPacksToOpen) + "... " + 
-                ((parseInt(numPacksToOpen) >= 1000000) ? PATIENCE : ""));
+                ((parseInt(numPacksToOpen) >= PATIENCE_OPEN_NUM) ? PATIENCE : ""));
 
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
@@ -129,37 +134,31 @@ $(function () {
                     numItemsObtained[itemIndex]++;
                 };
 
-                var hasPatienceMessage = 
-                    $(openNumPacksStatusID).html().includes("... P");
-                if (hasPatienceMessage) {
-                    $(openNumPacksStatusID).html(function () {
-                        var stopIndex = 
-                            $(openNumPacksStatusID).html().indexOf("... P") + 4;
-                        return $(openNumPacksStatusID).html()
-                                                      .substring(0, stopIndex);
-                    });
-                };
-
                 writeResultsToTable(numItemsObtained);
+
+                removePatienceMessage(openNumPacksStatusID);
+
                 $(openNumPacksStatusID).append("Done!");
+
             }, 50);
         } 
     });
 
-    $("#submitPacksByFilter").on("click", function (event) {
-        var targetItem = $(itemDropdownID).find("option:selected").val();
-        var targetNum = $("#packsByFilterAddNum").val();
+    $(openForItemBtnID).on("click", function (event) {
+        var targetItem = $(itemDropdownID).find("option:selected").val(),
+            targetNum = $(openPacksForItemAmtID).val();
         if (targetNum === "") {
             targetNum = 1;
-        }
+        };
         $(openNumPacksStatusID).html("&nbsp;");
         if (targetItem === "0") {
-            $(openPacksForItemStatusID).html("Please select an item!");
+            $(openForItemStatusID).html("Please select an item!");
         } else if (targetNum === "0") {
-            $(openPacksForItemStatusID).html("You opened 0 packs and got 0 " + 
+            $(openForItemStatusID).html("You opened 0 packs and got 0 " + 
                 targetItem + ". Congrats!");
         } else if (!$.isNumeric(targetNum)) {
-            $(openPacksForItemStatusID).html("Sorry - only numbers are accepted!");
+            $(openForItemStatusID).html("Sorry - only numbers are " + 
+                "accepted!");
         } else if (parseInt(targetNum) < 0 
             || (Math.ceil(parseInt(targetNum)) === 0 
             && Math.ceil(targetNum) === 0)) {
@@ -177,21 +176,21 @@ $(function () {
              rounded up to 1. As a result, this block would be ignored in favor 
              of the last else case!
             */
-            $(openPacksForItemStatusID).html("Sorry - only positive numbers are " + 
-                "accepted!");
+            $(openForItemStatusID).html("Sorry - only positive numbers " + 
+                "are accepted!");
         } else {
             targetNum = Math.ceil(targetNum);
-            $(openPacksForItemStatusID).html("Opening packs until " + targetNum + " " + 
-                targetItem + " obtained... " + 
-                ((targetNum >= 999) ? "Please be patient. This could take a while! " : ""));
+            $(openForItemStatusID).html("Opening packs until " + 
+                targetNum + " " + targetItem + " obtained... " + 
+                ((targetNum >= PATIENCE_ITEM_NUM) ? PATIENCE : ""));
 
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
-                var numItemsObtained = new Array(currentPackData.items.length).fill(0);
-                var item;
-                var itemIndex;
-                var numGotten = 0;
-                var numTries = 0;
+                var numItemsObtained = new Array(currentPackData.items.length).fill(0),
+                    numGotten        = 0,
+                    numTries         = 0,
+                    item,
+                    itemIndex;
 
                 do {
                     item = getRandomItemFromListByWeight(currentPackData);
@@ -205,17 +204,23 @@ $(function () {
 
                 writeResultsToTable(numItemsObtained);
 
-                if ($(openPacksForItemStatusID).html().includes("... P")) {
-                    $(openPacksForItemStatusID).html(function () {
-                        var stopIndex = $(openPacksForItemStatusID).html().indexOf("... P") + 4;
-                        return $(openPacksForItemStatusID).html().substring(0, stopIndex);
-                    })
-                }
+                removePatienceMessage(openForItemStatusID);
 
-                $(openPacksForItemStatusID).append("Done! It took " + numTries + " packs.");
+                $(openForItemStatusID).append("Done! It took " + numTries 
+                    + " packs.");
+
             }, 50);
 
         }
+    });
+
+    $(addItemToFilterID).on("click", function (event) {
+        var targetItem = $(itemDropdownID).find("option:selected").val();
+        var targetNum = $(openPacksForItemAmtID).val();
+        if (targetNum === "") {
+            targetNum = 1;
+        }
+        console.log("so this works I guess");
     });
 
 
@@ -281,6 +286,17 @@ $(function () {
 
     var makePluralIfNeeded = function (word, num) {
         return word + ((parseInt(num) === 1) ? "" : "s");
-    }
+    };
+
+    var removePatienceMessage = function (inputID) {
+        var statusHtml = $(inputID).html(),
+            hasPatienceMessage = statusHtml.includes("... P");
+        if (hasPatienceMessage) {
+            $(inputID).html(function () {
+                var stopIndex = statusHtml.indexOf("... P") + PERIODS_OFFSET;
+                return statusHtml.substring(0, stopIndex);
+            });
+        };
+    };
 
 });

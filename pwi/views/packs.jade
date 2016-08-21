@@ -17,13 +17,21 @@ block content
             | 
             input(type="button" value="Try your Luck!" id="submitPacksByNum")
             p(id="packsByNumStatus") &nbsp;
-            | Open Packs until Item(s) Obtained: 
-            select(id="packItems")
+            | Open Packs until Item Obtained: 
+            select(class="packItems")
             | 
-            input(type="text" id="packsByFilterAddNum" placeholder="quantity" maxlength="4")
+            input(type="text" id="packsByItemNum" placeholder="quantity" maxlength="4" class="smallTextBox")
             | 
             input(type="button" id="submitPacksByFilter" value="Try for item(s)!")
-            p(id="packsByFilterStatus") &nbsp;
+            p(id="packsByItemStatus") &nbsp;
+            | Open Packs until Items Obtained:
+            select(class="packItems")
+            | 
+            input(type="text" id="packsByFilterNum" placeholder="quantity" maxlength="4" class="smallTextBox")
+            | 
+            input(type="button" id="addItemByFilter" value="Add to list! (Not yet functional)")
+            p(id="packsByListStatus") &nbsp;
+            table(id="selectedItems")
           td(id="packInfo")
             table(id="packContents")
 
