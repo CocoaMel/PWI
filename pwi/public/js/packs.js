@@ -87,38 +87,15 @@ $(function () {
     $(openNumPacksBtnID).on("click", function (event) {
         $(openForItemStatusID).html("&nbsp;");
         var numPacksToOpen = $(numPacksToOpenID).val();
-        if (numPacksToOpen === "0") {
-            $(openNumPacksStatusID).html("You opened no packs and got " + 
-                "nothing ):");
-        } else if (numPacksToOpen === "") {
-            $(openNumPacksStatusID).html("Please input a number of packs " + 
-                "to open.");
-        } else if (!$.isNumeric(numPacksToOpen)) {
-            $(openNumPacksStatusID).html("Sorry - only numbers are accepted!");
-        } else if (parseInt(numPacksToOpen) < 0 
-               || (Math.ceil(parseInt(numPacksToOpen)) === 0 
-               && Math.ceil(numPacksToOpen) === 0)) {
-            /*
-             This checks if the input is negative OR if input is between -1 and 
-             0. Numbers between -1 and 0 would not be caught under negative
-             because parseInt will return 0. Just including 
-             parseInt(numPacksToOpen) < 0 and 
-             Math.ceil(parseInt(numPacksToOpen)) === 0) means that in the event 
-             that the user enters a number between 0 (exclusive) and 1 
-             (exclusive), this block will be triggered, which we don't want. 
-             It will be triggered because parseInt will return 0. Adding 
-             Math.ceil(numPacksToOpen) === 0 will prevent this because in the 
-             event of a number between 0 and 1 (exlusive), the number will be 
-             rounded up to 1. As a result, this block would be ignored in favor 
-             of the last else case!
-            */
-            $(openNumPacksStatusID).html("Sorry - only positive numbers are " + 
-                "accepted!");
+        if (!isValidNumber(numPacksToOpen)) {
+            $(openNumPacksStatusID).html("The quantity must be a number greater " 
+                + "than zero!");
         } else {
             numPacksToOpen = Math.ceil(numPacksToOpen);
             $(openNumPacksStatusID).html("Opening " + numPacksToOpen + 
                 makePluralIfNeeded(" pack", numPacksToOpen) + "... " + 
-                ((parseInt(numPacksToOpen) >= PATIENCE_OPEN_NUM) ? PATIENCE : ""));
+                ((parseInt(numPacksToOpen) >= PATIENCE_OPEN_NUM) ? 
+                PATIENCE : ""));
 
             // run function on a delay because the above HTML won't update without it
             window.setTimeout(function () {
@@ -153,31 +130,9 @@ $(function () {
         $(openNumPacksStatusID).html("&nbsp;");
         if (targetItem === "0") {
             $(openForItemStatusID).html("Please select an item!");
-        } else if (targetNum === "0") {
-            $(openForItemStatusID).html("You opened 0 packs and got 0 " + 
-                targetItem + ". Congrats!");
-        } else if (!$.isNumeric(targetNum)) {
-            $(openForItemStatusID).html("Sorry - only numbers are " + 
-                "accepted!");
-        } else if (parseInt(targetNum) < 0 
-            || (Math.ceil(parseInt(targetNum)) === 0 
-            && Math.ceil(targetNum) === 0)) {
-            /*
-             This checks if the input is negative OR if input is between -1 and 
-             0. Numbers between -1 and 0 would not be caught under negative
-             because parseInt will return 0. Just including 
-             parseInt(numPacksToOpen) < 0 and 
-             Math.ceil(parseInt(numPacksToOpen)) === 0) means that in the event 
-             that the user enters a number between 0 (exclusive) and 1 
-             (exclusive), this block will be triggered, which we don't want. 
-             It will be triggered because parseInt will return 0. Adding 
-             Math.ceil(numPacksToOpen) === 0 will prevent this because in the 
-             event of a number between 0 and 1 (exlusive), the number will be 
-             rounded up to 1. As a result, this block would be ignored in favor 
-             of the last else case!
-            */
-            $(openForItemStatusID).html("Sorry - only positive numbers " + 
-                "are accepted!");
+        } else if (!isValidNumber(targetNum)) {
+            $(openForItemStatusID).html("The quantity must be a number greater " 
+                + "than zero!");
         } else {
             targetNum = Math.ceil(targetNum);
             $(openForItemStatusID).html("Opening packs until " + 
@@ -210,8 +165,7 @@ $(function () {
                     + " packs.");
 
             }, 50);
-
-        }
+        };
     });
 
     $(addItemToFilterID).on("click", function (event) {
@@ -219,7 +173,7 @@ $(function () {
         var targetNum = $(openPacksForItemAmtID).val();
         if (targetNum === "") {
             targetNum = 1;
-        }
+        };
         console.log("so this works I guess");
     });
 
@@ -296,6 +250,14 @@ $(function () {
                 var stopIndex = statusHtml.indexOf("... P") + PERIODS_OFFSET;
                 return statusHtml.substring(0, stopIndex);
             });
+        };
+    };
+
+    var isValidNumber = function (number) {
+        if (!$.isNumeric(number) || parseFloat(number) <= 0) {
+            return false;
+        } else {
+            return true;
         };
     };
 
