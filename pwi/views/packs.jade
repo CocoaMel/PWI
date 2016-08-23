@@ -25,11 +25,9 @@ block content
             input(type="button" id="submitPacksByFilter" value="Try for item(s)!")
             p(id="packsByItemStatus") &nbsp;
             | Open Packs until Items Obtained:
-            select(class="packItems")
+            select(class="packItems" id="packItemOptions")
             | 
-            input(type="text" id="packsByFilterNum" placeholder="quantity" maxlength="4" class="smallTextBox")
-            | 
-            input(type="button" id="addItemByFilter" value="Add to list! (Not yet functional)")
+            input(type="button" id="addItemByFilter" value="Add to list!")
             p(id="packsByListStatus") &nbsp;
             table(id="selectedItems")
           td(id="packInfo")

@@ -9,7 +9,8 @@ $(function () {
         PATIENCE = "Please be patient. This could take a while!",
         PATIENCE_OPEN_NUM = 1000000,
         PATIENCE_ITEM_NUM = 999,
-        PERIODS_OFFSET = 4;
+        PERIODS_OFFSET = 4,
+        REMOVE_BTN = "<input type=\"button\" class=\"packRemove\" value=\"-\">";
 
     /* ids */
     var mainDropdownID        = "#packList",
@@ -23,7 +24,11 @@ $(function () {
         openForItemBtnID      = "#submitPacksByFilter", 
         openForItemStatusID   = "#packsByItemStatus",
         openPacksForItemAmtID = "#packsByItemNum",
-        addItemToFilterID     = "#addItemByFilter";
+        addItemToFilterID     = "#packItemOptions",
+        addItemToFilterBtnID  = "#addItemByFilter",
+        addNumToFilterID      = "#packsByFilterNum",
+        filterStatusID        = "#packsByListStatus",
+        selectedItems         = "#selectedItems";
 
     /* Setup */
     var currentPackData = {
@@ -122,7 +127,8 @@ $(function () {
     });
 
     $(openForItemBtnID).on("click", function (event) {
-        var targetItem = $(itemDropdownID).find("option:selected").val(),
+        var targetItem = $(itemDropdownID).find("option:selected")
+                                          .val(),
             targetNum = $(openPacksForItemAmtID).val();
         if (targetNum === "") {
             targetNum = 1;
@@ -168,13 +174,11 @@ $(function () {
         };
     });
 
-    $(addItemToFilterID).on("click", function (event) {
-        var targetItem = $(itemDropdownID).find("option:selected").val();
-        var targetNum = $(openPacksForItemAmtID).val();
-        if (targetNum === "") {
-            targetNum = 1;
-        };
-        console.log("so this works I guess");
+    $(addItemToFilterBtnID).on("click", function (event) {
+        var targetItem = $(addItemToFilterID).find("option:selected")
+                                             .val();
+        $(selectedItems).append("<tr><td>" + targetItem + "</td><td>" + 
+            REMOVE_BTN + "</td></tr>");
     });
 
 
