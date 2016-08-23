@@ -320,6 +320,28 @@
         "Inspired Tortoise Egg"           : "0.147601",
         "5 Fantasy Fruit Bag"             : "0.455288"
     },
+    "Lucidsilver Chest" : {
+        "Cloudruler Order"                : "0.000003",
+        "Mount Pet Ticket"                : "0.000016",
+        "Eye of the Jungle"               : "0.000032",
+        "Platinum Guardian Charm"         : "0.000202",
+        "Platinum Spirit Charm"           : "0.000318",
+        "Perfect Horn"                    : "0.000425",
+        "5 Hyper EXP Stone Ticket"        : "0.000531",
+        "Squad Signet"                    : "0.000849",
+        "Faction Signet"                  : "0.001699",
+        "Swift Talisman (72h)"            : "0.012739",
+        "Dress Suit Fashion Pack (7d)"    : "0.015924",
+        "Warlord Fashion Pack (7d)"       : "0.015924",
+        "Brawler Fashion Pack (7d)"       : "0.015924",
+        "French Maid Fashion Pack (7d)"   : "0.015924",
+        "Small Guardian Charm"            : "0.042463",
+        "Training Esoterica"              : "0.050955",
+        "Inspired Tortoise Egg"           : "0.063694",
+        "Inspired Swine Egg"              : "0.063694",
+        "Small Spirit Charm"              : "0.106157",
+        "5 Fantasy Fruit Bag"             : "0.592529"
+    },
     "Meteorite Fragment" : {
         "Crown of Madness"                : "0.000003",
         "Bookless Transcript"             : "0.000008",

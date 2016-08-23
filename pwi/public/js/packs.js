@@ -175,10 +175,15 @@ $(function () {
     });
 
     $(addItemToFilterBtnID).on("click", function (event) {
-        var targetItem = $(addItemToFilterID).find("option:selected")
-                                             .val();
-        $(selectedItems).append("<tr><td>" + targetItem + "</td><td>" + 
-            REMOVE_BTN + "</td></tr>");
+        var targetItem   = $(addItemToFilterID).find("option:selected")
+                                               .val();
+        if (isAlreadySelected(targetItem)) {
+            $(filterStatusID).html("You have already selected this item!");
+        } else {
+            $(selectedItems).append("<tr><td id=\"" + formatID(targetItem) + 
+                "Filter\">" + targetItem + "</td><td>" + REMOVE_BTN + 
+                "</td></tr>");
+        }
     });
 
 
@@ -219,6 +224,10 @@ $(function () {
             }
         }
     }
+
+    var isAlreadySelected = function (item) {
+        return !($("#" + formatID(item) + "Filter").html() == null);
+    };
 
     var formatPercent = function (num) {
         var formattedNum = removeTrailingZeroes((num * 100).toFixed(6)).toString() + "%";
