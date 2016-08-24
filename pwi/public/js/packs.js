@@ -9,13 +9,12 @@ $(function () {
         PATIENCE = "Please be patient. This could take a while!",
         PATIENCE_OPEN_NUM = 1000000,
         PATIENCE_ITEM_NUM = 999,
-        PERIODS_OFFSET = 4,
-        REMOVE_BTN = "<input type=\"button\" class=\"packRemove\" value=\"-\">";
+        PERIODS_OFFSET = 4;
 
-    /* ids */
+    /* ids and classes */
     var mainDropdownID        = "#packList",
         mainTableID           = "#packDisplay",
-        itemDropdownID        = ".packItems",
+        itemDropdownClass     = ".packItems",
         packContentsTableID   = "#packContents",
         numItemsWarningID     = "#packWarning",
         numPacksToOpenID      = "#packsByNum",
@@ -27,6 +26,7 @@ $(function () {
         addItemToFilterID     = "#packItemOptions",
         addItemToFilterBtnID  = "#addItemByFilter",
         addNumToFilterID      = "#packsByFilterNum",
+        runItemsByFilterID    = "#runItemsByFilter",
         filterStatusID        = "#packsByListStatus",
         selectedItems         = "#selectedItems";
 
@@ -62,7 +62,7 @@ $(function () {
     });
 
     var loadPackItemList = function (itemList) {
-        $(itemDropdownID).html("<option value=\"0\" name=\"select\">Select an" +
+        $(itemDropdownClass).html("<option value=\"0\" name=\"select\">Select an" +
             " Item!</option>");
         $(packContentsTableID).html(function () {
             var results                 = "",
@@ -75,7 +75,7 @@ $(function () {
                 results += "<tr><td id=\"" + formatID(key) + "\">0</td><td>" + 
                     key + " (" + formatPercent(itemList[key]) + ")</td></tr>";
                 arrayIndex++;
-                $(itemDropdownID).append("<option name=\"" + arrayIndex + 
+                $(itemDropdownClass).append("<option name=\"" + arrayIndex + 
                     "\" value=\"" + key + "\">" + key + "</option>");
             }
             $(numItemsWarningID).html("");
@@ -127,7 +127,7 @@ $(function () {
     });
 
     $(openForItemBtnID).on("click", function (event) {
-        var targetItem = $(itemDropdownID).find("option:selected")
+        var targetItem = $(itemDropdownClass).find("option:selected")
                                           .val(),
             targetNum = $(openPacksForItemAmtID).val();
         if (targetNum === "") {
@@ -177,15 +177,30 @@ $(function () {
     $(addItemToFilterBtnID).on("click", function (event) {
         var targetItem   = $(addItemToFilterID).find("option:selected")
                                                .val();
+        if ($(runItemsByFilterID).hasClass("hidden")) {
+            $(runItemsByFilterID).removeClass("hidden");
+        };
         if (isAlreadySelected(targetItem)) {
             $(filterStatusID).html("You have already selected this item!");
         } else {
             $(selectedItems).append("<tr><td id=\"" + formatID(targetItem) + 
-                "Filter\">" + targetItem + "</td><td>" + REMOVE_BTN + 
+                "Filter\">" + targetItem + "</td><td><input type=\"button\" " + 
+                "value=\"-\" id=\"removeItem" + formatID(targetItem) + "\"" + 
                 "</td></tr>");
-        }
+            var currentID = "#removeItem" + formatID(targetItem);
+            $(currentID).on("click", function (event) {
+                var rowOfItem = $(this).parent().parent()
+                rowOfItem.remove();
+                if ($(selectedItems).children().length === 0) {
+                    $(runItemsByFilterID).addClass("hidden");
+                }
+            });
+        };
     });
 
+    $(runItemsByFilterID).on("click", function (event) {
+        console.log("Whomp whomp whomppppp...");
+    });
 
     /* Helper Functions */
     /*var writeOneResultToTable = function (itemName) {

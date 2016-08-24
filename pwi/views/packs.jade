@@ -22,7 +22,7 @@ block content
             | 
             input(type="text" id="packsByItemNum" placeholder="quantity" maxlength="4" class="smallTextBox")
             | 
-            input(type="button" id="submitPacksByFilter" value="Try for item(s)!")
+            input(type="button" id="submitPacksByFilter" value="Try for item!")
             p(id="packsByItemStatus") &nbsp;
             | Open Packs until Items Obtained:
             select(class="packItems" id="packItemOptions")
@@ -30,6 +30,7 @@ block content
             input(type="button" id="addItemByFilter" value="Add to list!")
             p(id="packsByListStatus") &nbsp;
             table(id="selectedItems")
+            input(type="button" id="runItemsByFilter" class="hidden" value="Try for Items!")
           td(id="packInfo")
             table(id="packContents")
 
