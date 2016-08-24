@@ -128,7 +128,7 @@ $(function () {
 
     $(openForItemBtnID).on("click", function (event) {
         var targetItem = $(itemDropdownClass).find("option:selected")
-                                          .val(),
+                                             .val(),
             targetNum = $(openPacksForItemAmtID).val();
         if (targetNum === "") {
             targetNum = 1;
@@ -183,10 +183,10 @@ $(function () {
         if (isAlreadySelected(targetItem)) {
             $(filterStatusID).html("You have already selected this item!");
         } else {
-            $(selectedItems).append("<tr><td id=\"" + formatID(targetItem) + 
-                "Filter\">" + targetItem + "</td><td><input type=\"button\" " + 
-                "value=\"-\" id=\"removeItem" + formatID(targetItem) + "\"" + 
-                "</td></tr>");
+            $(selectedItems).append("<tr><td class=\"wantedItem\"id=\"" + 
+                formatID(targetItem) + "Filter\">" + targetItem + 
+                "</td><td><input type=\"button\" value=\"-\" id=\"removeItem" + 
+                formatID(targetItem) + "\"</td></tr>");
             var currentID = "#removeItem" + formatID(targetItem);
             $(currentID).on("click", function (event) {
                 var rowOfItem = $(this).parent().parent()
@@ -199,7 +199,44 @@ $(function () {
     });
 
     $(runItemsByFilterID).on("click", function (event) {
-        console.log("Whomp whomp whomppppp...");
+        var itemsSelected = $(".wantedItem"),
+            arrayOfItems  = [];
+        for (var i = 0; i < itemsSelected.length; i++) {
+            arrayOfItems[i] = $(".wantedItem")[i].innerHTML;
+        }
+        console.log(arrayOfItems);
+        $(filterStatusID).html("Opening packs until items obtained...");
+        // run function on a delay because the above HTML won't update without it
+        window.setTimeout(function () {
+            var numItemsObtained = new Array(currentPackData.items.length).fill(0),
+                numTries         = 0,
+                targetIndex      = -1,
+                item,
+                itemIndex;
+
+            do {
+                item = getRandomItemFromListByWeight(currentPackData);
+                itemIndex = currentPackData.items.indexOf(item);
+                numItemsObtained[itemIndex]++;
+                numTries++;
+                for (var i = 0; i < arrayOfItems.length; i++) {
+                    if (item === arrayOfItems[i]) {
+                        targetIndex = i;
+                        console.log("target aquired!");
+                    }
+                }
+                if (targetIndex != -1) {
+                    arrayOfItems.splice(targetIndex, 1);
+                    targetIndex = -1;
+                }
+            } while (arrayOfItems.length > 0) 
+
+            writeResultsToTable(numItemsObtained);
+
+            $(filterStatusID).append("Done! All items were obtained in " 
+                + numTries + " packs.");
+
+        }, 50);
     });
 
     /* Helper Functions */
