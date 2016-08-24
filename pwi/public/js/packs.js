@@ -64,6 +64,13 @@ $(function () {
     var loadPackItemList = function (itemList) {
         $(itemDropdownClass).html("<option value=\"0\" name=\"select\">Select an" +
             " Item!</option>");
+        $(selectedItems).empty();
+        if ($(runItemsByFilterID).hasClass("hidden")) {
+            $(runItemsByFilterID).addClass("hidden");
+        }
+        $(openNumPacksStatusID).html("&nbsp;");
+        $(openForItemStatusID).html("&nbsp;");
+        $(filterStatusID).html("&nbsp;");
         $(packContentsTableID).html(function () {
             var results                 = "",
                 arrayIndex              = 0;
@@ -186,7 +193,8 @@ $(function () {
             $(selectedItems).append("<tr><td class=\"wantedItem\"id=\"" + 
                 formatID(targetItem) + "Filter\">" + targetItem + 
                 "</td><td><input type=\"button\" value=\"-\" id=\"removeItem" + 
-                formatID(targetItem) + "\"</td></tr>");
+                formatID(targetItem) + "\"</td><td id=\"" + formatID(targetItem) + 
+                "PackNum\"></td></tr>");
             var currentID = "#removeItem" + formatID(targetItem);
             $(currentID).on("click", function (event) {
                 var rowOfItem = $(this).parent().parent()
@@ -199,30 +207,37 @@ $(function () {
     });
 
     $(runItemsByFilterID).on("click", function (event) {
-        var itemsSelected = $(".wantedItem"),
-            arrayOfItems  = [];
+        var itemsSelected        = $(".wantedItem"),
+            arrayOfItems         = [],
+            arrayOfItemsNoDelete = [];
         for (var i = 0; i < itemsSelected.length; i++) {
             arrayOfItems[i] = $(".wantedItem")[i].innerHTML;
+            arrayOfItemsNoDelete[i] = arrayOfItems[i];
         }
         console.log(arrayOfItems);
         $(filterStatusID).html("Opening packs until items obtained...");
+
         // run function on a delay because the above HTML won't update without it
         window.setTimeout(function () {
-            var numItemsObtained = new Array(currentPackData.items.length).fill(0),
-                numTries         = 0,
-                targetIndex      = -1,
+            var numItemsObtained  = new Array(currentPackData.items.length).fill(0),
+                packItemsObtainOn = new Array(arrayOfItemsNoDelete.length).fill(0),
+                numTries          = 0,
+                targetIndex       = -1,
+                originalIndex     = 0,
                 item,
-                itemIndex;
+                itemIndex,
+                itemID;
 
             do {
+                numTries++;
                 item = getRandomItemFromListByWeight(currentPackData);
                 itemIndex = currentPackData.items.indexOf(item);
                 numItemsObtained[itemIndex]++;
-                numTries++;
                 for (var i = 0; i < arrayOfItems.length; i++) {
                     if (item === arrayOfItems[i]) {
                         targetIndex = i;
-                        console.log("target aquired!");
+                        originalIndex = arrayOfItemsNoDelete.indexOf(item);
+                        packItemsObtainOn[originalIndex] = numTries;
                     }
                 }
                 if (targetIndex != -1) {
@@ -232,6 +247,11 @@ $(function () {
             } while (arrayOfItems.length > 0) 
 
             writeResultsToTable(numItemsObtained);
+
+            for (var i = 0; i < packItemsObtainOn.length; i++) {
+                itemID = "#" + formatID(arrayOfItemsNoDelete[i]) + "PackNum"; 
+                $(itemID).html("First obtained on pack number " + packItemsObtainOn[i]);
+            };
 
             $(filterStatusID).append("Done! All items were obtained in " 
                 + numTries + " packs.");
