@@ -1,2 +1,2 @@
 # PWI
-A repo for the random things I make relating to Perfect World International
+The repo for the site of resources I'm making for Perfect World International.
