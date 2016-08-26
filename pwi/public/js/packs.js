@@ -62,8 +62,8 @@ $(function () {
     });
 
     var loadPackItemList = function (itemList) {
-        $(itemDropdownClass).html("<option value=\"0\" name=\"select\">Select an" +
-            " Item!</option>");
+        $(itemDropdownClass).html("<option value=\"0\" name=\"select\">Select " 
+            + "an Item!</option>");
         $(selectedItems).empty();
         if ($(runItemsByFilterID).hasClass("hidden")) {
             $(runItemsByFilterID).addClass("hidden");
@@ -278,19 +278,17 @@ $(function () {
     // Thanks to 
     // http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
     var getRandomItemFromListByWeight = function (packData) {
-        var chances = packData.chances;
-        var list = packData.items;
-        var totalWeight = chances.reduce(function (prev, cur) {
-            return prev + cur;
-        });
-
-        var randomNum = getRandomNum(0, totalWeight);
-        var weightSum = 0;
+        var chances     = packData.chances,
+            list        = packData.items,
+            totalWeight = chances.reduce(function (prev, cur) {
+                return prev + cur;
+            }),
+            randomNum = getRandomNum(0, totalWeight),
+            weightSum = 0;
 
         for (var i = 0; i < list.length; i++) {
             weightSum += chances[i];
             weightSum = +weightSum.toFixed(6);
-
             if (randomNum <= weightSum) {
                 return list[i];
             }
@@ -302,7 +300,8 @@ $(function () {
     };
 
     var formatPercent = function (num) {
-        var formattedNum = removeTrailingZeroes((num * 100).toFixed(6)).toString() + "%";
+        var formattedNum = removeTrailingZeroes((num * 100).toFixed(6))
+                                                           .toString() + "%";
         if (formattedNum.includes(".%")) {
             var periodIndex = formattedNum.indexOf(".");
             formattedNum = formattedNum.substring(0, periodIndex + 1) + 
